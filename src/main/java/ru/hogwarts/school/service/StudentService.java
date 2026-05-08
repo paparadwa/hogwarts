@@ -70,7 +70,7 @@ public class StudentService {
     }
 
     @Transactional
-    public Avatar findAvatar(Long id){
+    public Avatar findAvatar(Long id) {
         return avatarRepository.findByStudentId(id).get();
     }
 
@@ -82,11 +82,11 @@ public class StudentService {
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
 
-        try(InputStream is = file.getInputStream();
-            OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
-            BufferedInputStream bis = new BufferedInputStream(is, 1024);
-            BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
-                ){
+        try (InputStream is = file.getInputStream();
+             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
+             BufferedInputStream bis = new BufferedInputStream(is, 1024);
+             BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
+        ) {
             bis.transferTo(bos);
         }
 
@@ -100,7 +100,19 @@ public class StudentService {
         avatarRepository.save(avatar);
     }
 
-    private String getExtension(String filename){
+    private String getExtension(String filename) {
         return filename.substring(filename.lastIndexOf('.') + 1);
+    }
+
+    public Integer getStudentsQuantity() {
+        return studentRepository.getStudentsQuantity();
+    }
+
+    public Float getStudentsAverageAge() {
+        return studentRepository.getStudentsAverageAge();
+    }
+
+    public List<Student> getLastFiveStudents() {
+        return studentRepository.getLastFiveStudents();
     }
 }
