@@ -128,4 +128,22 @@ public class StudentController {
             is.transferTo(os);
         }
     }
+
+    @GetMapping("/students-quantity")
+    public Integer getStudentsQuantity() {
+        return studentService.getStudentsQuantity();
+    }
+
+    @GetMapping("/students-average-age")
+    public ResponseEntity<Float> getStudentsAverageAge() {
+        if (studentService.getStudentsAverageAge() == null) {
+            return ResponseEntity.ok(0.0f);
+        }
+        return ResponseEntity.ok(studentService.getStudentsAverageAge());
+    }
+
+    @GetMapping("/last-five-students")
+    public List<Student> getLastFiveStudents() {
+        return studentService.getLastFiveStudents();
+    }
 }
