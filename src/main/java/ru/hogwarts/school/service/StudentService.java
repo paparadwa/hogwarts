@@ -1,5 +1,7 @@
 package ru.hogwarts.school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,8 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final AvatarRepository avatarRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
+
     @Autowired
     public StudentService(StudentRepository studentRepository, AvatarRepository avatarRepository) {
         this.studentRepository = studentRepository;
@@ -32,26 +36,32 @@ public class StudentService {
     }
 
     public Student addStudent(Student student) {
+        logger.info("Was invoked method for add student");
         return studentRepository.save(student);
     }
 
     public Student getStudent(Long id) {
+        logger.info("Was invoked method for get student");
         return studentRepository.findById(id).orElse(null);
     }
 
     public Student editStudent(Student student) {
+        logger.info("Was invoked method for edit student");
         return studentRepository.save(student);
     }
 
     public Collection<Student> getAllStudents() {
+        logger.info("Was invoked method for get all students");
         return studentRepository.findAll();
     }
 
     public void deleteStudent(Long id) {
+        logger.info("Was invoked method for delete student");
         studentRepository.deleteById(id);
     }
 
     public Collection<Student> findStudentsByAge(int age) {
+        logger.info("Was invoked method for find students by age {}", age);
         ArrayList<Student> foundStudents = new ArrayList<>();
         for (Student student : studentRepository.findAll()) {
             if (student.getAge() == age) {
@@ -62,20 +72,24 @@ public class StudentService {
     }
 
     public Collection<Student> findStudentsBetweenAge(int ageMin, int ageMax) {
+        logger.info("Was invoked method for find students between age {} and {}", ageMin, ageMax);
         return studentRepository.findByAgeBetween(ageMin, ageMax);
     }
 
     public Faculty getStudentFaculty(Long id) {
+        logger.info("Was invoked method for get student faculty");
         return studentRepository.findById(id).get().getFaculty();
     }
 
     @Transactional
     public Avatar findAvatar(Long id) {
+        logger.info("Was invoked method for find avatar of student {}", id);
         return avatarRepository.findByStudentId(id).get();
     }
 
     @Transactional
     public void uploadAvatar(Long studentId, MultipartFile file) throws IOException {
+        logger.info("Was invoked method for upload student's avatar");
         Student student = getStudent(studentId);
 
         Path filePath = Path.of(avatarsDir, studentId + "." + getExtension(file.getOriginalFilename()));
@@ -101,18 +115,22 @@ public class StudentService {
     }
 
     private String getExtension(String filename) {
+        logger.info("Was invoked method for get extension");
         return filename.substring(filename.lastIndexOf('.') + 1);
     }
 
     public Integer getStudentsQuantity() {
+        logger.info("Was invoked method for get quantity of students");
         return studentRepository.getStudentsQuantity();
     }
 
     public Float getStudentsAverageAge() {
+        logger.info("Was invoked method for get average age of students");
         return studentRepository.getStudentsAverageAge();
     }
 
     public List<Student> getLastFiveStudents() {
+        logger.info("Was invoked method for get last five students");
         return studentRepository.getLastFiveStudents();
     }
 }
