@@ -17,6 +17,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -126,11 +127,23 @@ public class StudentService {
 
     public Float getStudentsAverageAge() {
         logger.info("Was invoked method for get average age of students");
-        return studentRepository.getStudentsAverageAge();
+        List<Student> students = studentRepository.findAll();
+        return (float) students.stream()
+                .mapToInt(Student::getAge).average().orElse(0f);
     }
 
     public List<Student> getLastFiveStudents() {
         logger.info("Was invoked method for get last five students");
         return studentRepository.getLastFiveStudents();
+    }
+
+    public List<String> getStudentsNamesStartWithA() {
+        logger.info("Was invoked method for student's names start with А");
+        List<Student> students = studentRepository.findAll();
+        return students.stream()
+                .filter(student -> student.getName() != null && student.getName().toUpperCase().startsWith("А"))
+                .map(student -> student.getName().toUpperCase())
+                .sorted()
+                .collect(Collectors.toList());
     }
 }
