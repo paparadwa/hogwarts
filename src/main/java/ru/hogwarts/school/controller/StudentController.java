@@ -134,16 +134,21 @@ public class StudentController {
         return studentService.getStudentsQuantity();
     }
 
+    @GetMapping("/last-five-students")
+    public List<Student> getLastFiveStudents() {
+        return studentService.getLastFiveStudents();
+    }
+
+    @GetMapping("/names-start-with-a")
+    public ResponseEntity<List<String>> getStudentsNamesStartWithA() {
+        return ResponseEntity.ok(studentService.getStudentsNamesStartWithA());
+    }
+
     @GetMapping("/students-average-age")
     public ResponseEntity<Float> getStudentsAverageAge() {
         if (studentService.getStudentsAverageAge() == null) {
             return ResponseEntity.ok(0.0f);
         }
         return ResponseEntity.ok(studentService.getStudentsAverageAge());
-    }
-
-    @GetMapping("/last-five-students")
-    public List<Student> getLastFiveStudents() {
-        return studentService.getLastFiveStudents();
     }
 }
