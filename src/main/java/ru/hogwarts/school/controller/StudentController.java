@@ -151,4 +151,40 @@ public class StudentController {
         }
         return ResponseEntity.ok(studentService.getStudentsAverageAge());
     }
+
+    @GetMapping("/students/print-parallel")
+    public void printParallel() {
+        System.out.println(studentService.getStudent(1L).getName());
+        System.out.println(studentService.getStudent(2L).getName());
+
+        new Thread(() -> {
+            System.out.println(studentService.getStudent(3L).getName());
+            System.out.println(studentService.getStudent(4L).getName());
+        }).start();
+
+        new Thread(() -> {
+            System.out.println(studentService.getStudent(5L).getName());
+            System.out.println(studentService.getStudent(6L).getName());
+        }).start();
+    }
+
+    @GetMapping("/students/print-synchronized")
+    public void printParallelSynchronized() {
+        printName(1L);
+        printName(2L);
+
+        new Thread(() -> {
+            printName(3L);
+            printName(4L);
+        }).start();
+
+        new Thread(() -> {
+            printName(5L);
+            printName(6L);
+        }).start();
+    }
+
+    private synchronized void printName(Long id) {
+        System.out.println(studentService.getStudent(id).getName());
+    }
 }
